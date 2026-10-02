@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Renux Hub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-style: normal !important;
+    }
+    body {
+      min-height: 100vh;
+      background: #0a0a0a;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+    .background {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background-color: #0a0a0a;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .blur {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+    }
+    .blur-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.13) 0%, transparent 70%);
+      top: -150px;
+      left: -150px;
+    }
+    .blur-2 {
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 70%);
+      bottom: -200px;
+      right: -150px;
+    }
+    .blur-3 {
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: 72px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10,10,10,0.72);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: white;
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.25);
+    }
+    .logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    .logo-text span {
+      color: rgba(255,255,255,0.45);
+      font-weight: 500;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: calc(100vh - 72px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .card {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      background: rgba(26,26,26,0.85);
+      border-radius: 20px;
+      padding: 32px;
+      overflow: hidden;
+      z-index: 1;
+      isolation: isolate;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 22px;
+      background: conic-gradient(from var(--angle), #0a0a0a, #ffffff, #d0d0d0, #ffffff, #0a0a0a, #ffffff, #0a0a0a);
+      animation: spin 4s linear infinite;
+      z-index: -2;
+    }
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: 19px;
+      background: rgba(18,18,18,0.96);
+      z-index: -1;
+    }
+    .card-glow {
+      position: absolute;
+      inset: -2px;
+      border-radius: 22px;
+      background: conic-gradient(from var(--angle), #0a0a0a, #ffffff, #d0d0d0, #ffffff, #0a0a0a);
+      animation: spin 4s linear infinite;
+      filter: blur(14px);
+      opacity: 0.32;
+      z-index: -3;
+    }
+    @property --angle {
+      syntax: "<angle>";
+      initial-value: 0deg;
+      inherits: false;
+    }
+    @keyframes spin {
+      to { --angle: 360deg; }
+    }
+    .label {
+      position: relative;
+      z-index: 2;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 20px;
+    }
+    .paragraph {
+      position: relative;
+      z-index: 2;
+      font-size: 15px;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.78);
+      letter-spacing: -0.01em;
+    }
+    .paragraph strong {
+      color: white;
+      font-weight: 600;
+    }
+    .link-btn {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      margin-top: 24px;
+      padding: 15px;
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+    .link-btn:hover {
+      background: #f0f0f0;
+    }
+    .link-btn.pop {
+      animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.06); }
+      70% { transform: scale(0.97); }
+      100% { transform: scale(1); }
+    }
+    .arrow {
+      transition: transform 0.2s ease;
+    }
+    .link-btn:hover .arrow {
+      transform: translateX(3px);
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <div class="blur blur-1"></div>
+    <div class="blur blur-2"></div>
+    <div class="blur blur-3"></div>
+  </div>
+  <header>
+    <div class="logo-wrap">
+      <div class="logo-icon">D</div>
+      <div class="logo-text">Dash<span>board</span></div>
+    </div>
+    <div class="header-right">
+      <div class="pill"><div class="dot"></div> Live </div>
+    </div>
+  </header>
+  <main>
+    <div class="card">
+      <div class="card-glow"></div>
+      <div class="label">Renux Hub</div>
+      <p class="paragraph">
+        <strong>Renux Hub</strong> It is the best keyless script hub, featuring a great UI and regular updates, with support for 6+ popular games and an extremely stable loader system.
+      </p>
+      <p class="paragraph" style="margin-top: 16px; font-size: 14px; color: rgba(255,255,255,0.55);">
+        Click the button below to get the script.
+      </p>
+      <a id="linkBtn" class="link-btn" href="https://renuxhub-loader.vercel.app/script.html" target="_blank">
+        open to website <span class="arrow">→</span>
+      </a>
+    </div>
+  </main>
+  <script>
+    const linkBtn = document.getElementById('linkBtn');
+    linkBtn.addEventListener('click', () => {
+      linkBtn.classList.remove('pop');
+      void linkBtn.offsetWidth;
+      linkBtn.classList.add('pop');
+      setTimeout(() => {
+        linkBtn.classList.remove('pop');
+      }, 500);
+    });
+  </script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+</html>
