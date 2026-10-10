@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://renuxhub-script.vercel.app/sitemap.xml
