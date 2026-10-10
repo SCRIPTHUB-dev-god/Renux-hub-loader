@@ -695,21 +695,44 @@
     const toast = document.getElementById('toast');
     const copyCountSpan = document.getElementById('copyCount');
 
-    function getStoredCount() {
-      let count = localStorage.getItem('renux_copy_count');
-      if (count === null) {
-        count = 0;
-        localStorage.setItem('renux_copy_count', count);
+    const BIN_ID = 'YOUR_BIN_ID_HERE';
+    const API_KEY = 'YOUR_MASTER_KEY_HERE';
+
+    async function fetchJsonData() {
+      try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+          headers: {
+            'X-Master-Key': API_KEY
+          }
+        });
+        if (response.ok) {
+          const result = await response.json();
+          const count = result.record.runs || 0;
+          copyCountSpan.textContent = count;
+        }
+      } catch (err) {
+        copyCountSpan.textContent = '0';
       }
-      return parseInt(count);
     }
 
-    function updateStoredCount(newCount) {
-      localStorage.setItem('renux_copy_count', newCount);
-      copyCountSpan.textContent = newCount;
+    async function updateJsonData(newCount) {
+      try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': API_KEY
+          },
+          body: JSON.stringify({ runs: newCount })
+        });
+        if (response.ok) {
+          copyCountSpan.textContent = newCount;
+        }
+      } catch (err) {
+      }
     }
 
-    copyCountSpan.textContent = getStoredCount();
+    fetchJsonData();
 
     function showToast() {
       toast.classList.add('show');
@@ -729,8 +752,9 @@
         copyBtn.textContent = 'Copied!';
         showToast();
         
-        let currentCount = getStoredCount() + 1;
-        updateStoredCount(currentCount);
+        let currentCount = parseInt(copyCountSpan.textContent) || 0;
+        currentCount += 1;
+        await updateJsonData(currentCount);
 
         setTimeout(() => {
           copyBtn.textContent = 'Copy Loader';
@@ -746,8 +770,9 @@
         copyBtn.textContent = 'Copied!';
         showToast();
 
-        let currentCount = getStoredCount() + 1;
-        updateStoredCount(currentCount);
+        let currentCount = parseInt(copyCountSpan.textContent) || 0;
+        currentCount += 1;
+        await updateJsonData(currentCount);
 
         setTimeout(() => {
           copyBtn.textContent = 'Copy Loader';
