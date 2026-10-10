@@ -1,19 +1,21 @@
 local file_path = "data.json"
 
 local function readCount()
-  local f = io.open(file_path, "r")
-  if not f then return 0 end
-  local content = f:read("*all")
-  f:close()
-  return tonumber(content:match('"runs"%s*:%s*(%d+)')) or 0
+  if type(isfile) == "function" and isfile(file_path) then
+    local success, content = pcall(readfile, file_path)
+    if success and content then
+      local number = content:match('"runs"%s*:%s*(%d+)')
+      return tonumber(number) or 0
+    end
+  end
+  return 0
 end
 
 local function saveCount(count)
-  local f = io.open(file_path, "w")
-  if f then
-    f:write(string.format('{"runs": %d}', count))
-    f:close()
+  if type(writefile) == "function" then
+    pcall(writefile, file_path, string.format('{"runs": %d}', count))
   end
 end
 
-saveCount(readCount() + 1)
+local count = readCount() + 1
+saveCount(count)
