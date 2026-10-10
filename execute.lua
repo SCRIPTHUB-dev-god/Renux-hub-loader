@@ -3,18 +3,17 @@ local file_path = "data.json"
 local function readCount()
   local f = io.open(file_path, "r")
   if not f then return 0 end
-  local content = f:read("*a")
+  local content = f:read("*all")
   f:close()
-  local number = content:match('"runs"%s*:%s*(%d+)')
-  return tonumber(number) or 0
+  return tonumber(content:match('"runs"%s*:%s*(%d+)')) or 0
 end
 
 local function saveCount(count)
   local f = io.open(file_path, "w")
-  f:write(string.format('{"runs": %d}', count))
-  f:close()
+  if f then
+    f:write(string.format('{"runs": %d}', count))
+    f:close()
+  end
 end
 
-local count = readCount()
-count = count + 1
-saveCount(count)
+saveCount(readCount() + 1)
