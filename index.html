@@ -396,19 +396,6 @@
     .copy-btn.pop {
       animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .execution-text {
-      position: relative;
-      z-index: 2;
-      margin-top: 14px;
-      text-align: center;
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.5);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
-    }
-    .execution-text span {
-      color: #ffffff;
-      font-weight: 600;
-    }
     .list {
       position: relative;
       z-index: 2;
@@ -576,9 +563,6 @@
             <div class="label">Loader.lua</div>
             <div id="output" class="output">loadstring(game:HttpGet("https://renuxhub-script.vercel.app/loaders/main.lua",true))()</div>
             <button id="copyBtn" class="copy-btn">Copy Loader</button>
-            <p class="execution-text">
-              has been copy : <span id="copyCount">0</span>
-            </p>
           </div>
           <div class="card" style="margin-bottom: 24px;">
             <div class="label">Game Support</div>
@@ -693,46 +677,6 @@
     const output = document.getElementById('output');
     const copyBtn = document.getElementById('copyBtn');
     const toast = document.getElementById('toast');
-    const copyCountSpan = document.getElementById('copyCount');
-
-    const BIN_ID = 'YOUR_BIN_ID_HERE';
-    const API_KEY = 'YOUR_MASTER_KEY_HERE';
-
-    async function fetchJsonData() {
-      try {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-          headers: {
-            'X-Master-Key': API_KEY
-          }
-        });
-        if (response.ok) {
-          const result = await response.json();
-          const count = result.record.runs || 0;
-          copyCountSpan.textContent = count;
-        }
-      } catch (err) {
-        copyCountSpan.textContent = '0';
-      }
-    }
-
-    async function updateJsonData(newCount) {
-      try {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': API_KEY
-          },
-          body: JSON.stringify({ runs: newCount })
-        });
-        if (response.ok) {
-          copyCountSpan.textContent = newCount;
-        }
-      } catch (err) {
-      }
-    }
-
-    fetchJsonData();
 
     function showToast() {
       toast.classList.add('show');
@@ -751,11 +695,6 @@
         await navigator.clipboard.writeText(text);
         copyBtn.textContent = 'Copied!';
         showToast();
-        
-        let currentCount = parseInt(copyCountSpan.textContent) || 0;
-        currentCount += 1;
-        await updateJsonData(currentCount);
-
         setTimeout(() => {
           copyBtn.textContent = 'Copy Loader';
           copyBtn.classList.remove('pop');
@@ -769,11 +708,6 @@
         document.body.removeChild(textarea);
         copyBtn.textContent = 'Copied!';
         showToast();
-
-        let currentCount = parseInt(copyCountSpan.textContent) || 0;
-        currentCount += 1;
-        await updateJsonData(currentCount);
-
         setTimeout(() => {
           copyBtn.textContent = 'Copy Loader';
           copyBtn.classList.remove('pop');
