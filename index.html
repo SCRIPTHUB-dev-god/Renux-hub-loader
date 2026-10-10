@@ -577,7 +577,7 @@
             <div id="output" class="output">loadstring(game:HttpGet("https://renuxhub-script.vercel.app/loaders/main.lua",true))()</div>
             <button id="copyBtn" class="copy-btn">Copy Loader</button>
             <p class="execution-text">
-              has been executed : <span id="executionCount">0</span>
+              has been copy : <span id="copyCount">0</span>
             </p>
           </div>
           <div class="card" style="margin-bottom: 24px;">
@@ -693,21 +693,21 @@
     const output = document.getElementById('output');
     const copyBtn = document.getElementById('copyBtn');
     const toast = document.getElementById('toast');
-    const executionCountSpan = document.getElementById('executionCount');
+    const copyCountSpan = document.getElementById('copyCount');
 
-    async function fetchExecutionData() {
+    async function fetchCopyData() {
       try {
         const response = await fetch('data.json');
         if (response.ok) {
           const data = await response.json();
           if (data && typeof data.runs !== 'undefined') {
-            executionCountSpan.textContent = data.runs;
+            copyCountSpan.textContent = data.runs;
           }
         }
       } catch (err) {
       }
     }
-    fetchExecutionData();
+    fetchCopyData();
 
     function showToast() {
       toast.classList.add('show');
@@ -726,6 +726,11 @@
         await navigator.clipboard.writeText(text);
         copyBtn.textContent = 'Copied!';
         showToast();
+        
+        let currentCount = parseInt(copyCountSpan.textContent) || 0;
+        currentCount += 1;
+        copyCountSpan.textContent = currentCount;
+
         setTimeout(() => {
           copyBtn.textContent = 'Copy Loader';
           copyBtn.classList.remove('pop');
@@ -739,6 +744,11 @@
         document.body.removeChild(textarea);
         copyBtn.textContent = 'Copied!';
         showToast();
+
+        let currentCount = parseInt(copyCountSpan.textContent) || 0;
+        currentCount += 1;
+        copyCountSpan.textContent = currentCount;
+
         setTimeout(() => {
           copyBtn.textContent = 'Copy Loader';
           copyBtn.classList.remove('pop');
