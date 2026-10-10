@@ -695,19 +695,21 @@
     const toast = document.getElementById('toast');
     const copyCountSpan = document.getElementById('copyCount');
 
-    async function fetchCopyData() {
-      try {
-        const response = await fetch('data.json');
-        if (response.ok) {
-          const data = await response.json();
-          if (data && typeof data.runs !== 'undefined') {
-            copyCountSpan.textContent = data.runs;
-          }
-        }
-      } catch (err) {
+    function getStoredCount() {
+      let count = localStorage.getItem('renux_copy_count');
+      if (count === null) {
+        count = 0;
+        localStorage.setItem('renux_copy_count', count);
       }
+      return parseInt(count);
     }
-    fetchCopyData();
+
+    function updateStoredCount(newCount) {
+      localStorage.setItem('renux_copy_count', newCount);
+      copyCountSpan.textContent = newCount;
+    }
+
+    copyCountSpan.textContent = getStoredCount();
 
     function showToast() {
       toast.classList.add('show');
@@ -727,9 +729,8 @@
         copyBtn.textContent = 'Copied!';
         showToast();
         
-        let currentCount = parseInt(copyCountSpan.textContent) || 0;
-        currentCount += 1;
-        copyCountSpan.textContent = currentCount;
+        let currentCount = getStoredCount() + 1;
+        updateStoredCount(currentCount);
 
         setTimeout(() => {
           copyBtn.textContent = 'Copy Loader';
@@ -745,9 +746,8 @@
         copyBtn.textContent = 'Copied!';
         showToast();
 
-        let currentCount = parseInt(copyCountSpan.textContent) || 0;
-        currentCount += 1;
-        copyCountSpan.textContent = currentCount;
+        let currentCount = getStoredCount() + 1;
+        updateStoredCount(currentCount);
 
         setTimeout(() => {
           copyBtn.textContent = 'Copy Loader';
